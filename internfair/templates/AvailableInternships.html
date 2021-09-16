@@ -320,15 +320,12 @@
 
     function sorting_values() {
       console.log("working2");
+
       const available_internships = '{{ available_internships_json|safe }}' ;
       const available_internships_json = JSON.parse(available_internships);
       available_internships_json.sort(function(a, b){return a.fields.stipend - b.fields.stipend});
       const table = document.getElementsByClassName("tableData");
-      // column2 = document.getElementsByClassName("column2").innerHTML;
-      // column3 = document.getElementsByClassName("column3").innerHTML;
-      // column4 = document.getElementsByClassName("column4").innerHTML;
-      // var data
-      for (let i = 0; i < 6 ; i++) {
+      for (let i = 0; i < table.length ; i++) {
         var data = `<div class="col-md-3 padding td" class='column1'>${available_internships_json[i].fields.startup}</div>
                 <div class="col-md-3 padding td" class='column2'>${available_internships_json[i].fields.profile}</div>
                 <div class="col-md-3 padding td" class='column3'>${available_internships_json[i].fields.location}</div>
@@ -336,8 +333,9 @@
 
         table[i].innerHTML = data
       }
-      
+
       console.log(available_internships_json);
+      console.log("done");
     }
   </script>
 
