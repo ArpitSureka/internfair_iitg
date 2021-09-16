@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+
+from django.core import serializers
 # Create your views here.
 
 def index(request):
@@ -177,8 +179,12 @@ def AvailableInternships(request):
             if y not in startupName:
                 startupName.append(y)
 
+        available_internships_json = serializers.serialize('json', available_internships)
+
+
         template = "AvailableInternships.html"
-        context = {'interns': available_internships, 'startupName': startupName}
+        context = {'interns': available_internships, 'startupName': startupName, 'available_internships_json':available_internships_json}
+        
         return render(request, template, context)
 
 

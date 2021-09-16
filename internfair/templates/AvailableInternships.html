@@ -99,10 +99,10 @@
         </div>
         <div class="col-md">
           <div class="row light-text">
-            <div class="col padding">NAME</div>
-            <div class="col padding">PROFILE</div>
-            <div class="col padding">LOCATION</div>
-            <div class="col padding">STIPEND</div>
+            <div class="col padding"><input type="button" value='NAME' onclick="sorting_string()"></div>
+            <div class="col padding"><input type="button" value='PROFILE' onclick="sorting_string()"></div>
+            <div class="col padding"><input type="button" value='LOCATION' onclick="sorting_string()"></div>
+            <div class="col padding"><input type="button" value='STIPEND' onclick="sorting_values()"></div>
           </div>
 
         </div>
@@ -117,15 +117,16 @@
           <img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img>
         </div>
         <div class="col-auto col-md p-0 px-md-3">
-          <div class="row flex-column flex-md-row  justify-content-center " style="height: 100%;">
-            <div class="col-md-3 padding td"> {{ intern.startup.companyName }}</div>
-            <div class="col-md-3 padding td">{{ intern.profile }}</div>
-            <div class="col-md-3 padding td">{{ intern.location }}</div>
-            <div class="col-md-3 padding td">{{ intern.stipend }}</div>
+          <div class="row flex-column flex-md-row  justify-content-center " style="height: 100%;" class = 'tableData'>
+            <div class="col-md-3 padding td" class='column1'>{{ intern.startup }} </div>
+            <div class="col-md-3 padding td" class='column2'>{{ intern.profile }}</div>
+            <div class="col-md-3 padding td" class='column3'>{{ intern.location }}</div>
+            <div class="col-md-3 padding td" class='column4'>{{ intern.stipend }}</div>
           </div>
         </div>
       </div>
 
+      
       {% comment %} Apply to company modal {% endcomment %}
       <div class="applyToCompany" id="modal{{intern.id}}">
         <div class="applyCard" style="margin:auto;">
@@ -308,6 +309,35 @@
     function submitApplication(i) {
       alert("Application submitted successfully");
       window.location.replace("{%url 'StudentProfile'%}");
+    }
+
+    function sorting_string() {
+      console.log("working");
+      const available_internships = '{{ available_internships_json|safe }}' ;
+      const available_internships_json = JSON.parse(available_internships);
+      console.log(available_internships_json);
+    }
+
+    function sorting_values() {
+      console.log("working2");
+      const available_internships = '{{ available_internships_json|safe }}' ;
+      const available_internships_json = JSON.parse(available_internships);
+      available_internships_json.sort(function(a, b){return a.fields.stipend - b.fields.stipend});
+      const table = document.getElementsByClassName("tableData");
+      // column2 = document.getElementsByClassName("column2").innerHTML;
+      // column3 = document.getElementsByClassName("column3").innerHTML;
+      // column4 = document.getElementsByClassName("column4").innerHTML;
+      // var data
+      for (let i = 0; i < 6 ; i++) {
+        var data = `<div class="col-md-3 padding td" class='column1'>${available_internships_json[i].fields.startup}</div>
+                <div class="col-md-3 padding td" class='column2'>${available_internships_json[i].fields.profile}</div>
+                <div class="col-md-3 padding td" class='column3'>${available_internships_json[i].fields.location}</div>
+                <div class="col-md-3 padding td" class='column4'>${available_internships_json[i].fields.stipend}</div>`
+
+        table[i].innerHTML = data
+      }
+      
+      console.log(available_internships_json);
     }
   </script>
 
