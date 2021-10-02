@@ -9,6 +9,9 @@
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.0.1" async></script>
   <link rel="stylesheet" type="text/css" href="{% static 'css/AvailableInternships.css' %}">
+  <!-- font awesome link for sorting icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- font awesome link for sorting icons -->
   <title>Available Internships</title>
 </head>
 
@@ -99,10 +102,10 @@
         </div>
         <div class="col-md">
           <div class="row light-text">
-            <div class="col padding"><input type="button" value='NAME' onclick="sorting_string()"></div>
-            <div class="col padding"><input type="button" value='PROFILE' onclick="sorting_string()"></div>
-            <div class="col padding"><input type="button" value='LOCATION' onclick="sorting_string()"></div>
-            <div class="col padding"><input type="button" value='STIPEND' onclick="sorting_values()"></div>
+            <div class="col padding"><input type="button" value='NAME' onclick="sorting_string('startup')"> <i class="fas fa-sort" id="startup"></i></div>
+            <div class="col padding"><input type="button" value='PROFILE' onclick="sorting_string('profile')"> <i class="fas fa-sort" id="profile"></i></div>
+            <div class="col padding"><input type="button" value='LOCATION' onclick="sorting_string('location')"> <i class="fas fa-sort" id="location"></i></div>
+            <div class="col padding"><input type="button" value='STIPEND' onclick="sorting_values('stipend')"> <i class="fas fa-sort" id="stipend"></i></div>
           </div>
 
         </div>
@@ -117,11 +120,12 @@
           <img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img>
         </div>
         <div class="col-auto col-md p-0 px-md-3">
-          <div class="row flex-column flex-md-row  justify-content-center " style="height: 100%;" class = 'tableData'>
-            <div class="col-md-3 padding td" class='column1'>{{ intern.startup }} </div>
-            <div class="col-md-3 padding td" class='column2'>{{ intern.profile }}</div>
-            <div class="col-md-3 padding td" class='column3'>{{ intern.location }}</div>
-            <div class="col-md-3 padding td" class='column4'>{{ intern.stipend }}</div>
+          <div class="row flex-column flex-md-row  justify-content-center tableData " style="height: 100%;">
+            <!-- <div class="col-md-3 padding td" >{{ intern.startup }} </div> -->
+            <div class="col-md-3 padding td" >{{ intern.startup }} </div>
+            <div class="col-md-3 padding td" >{{ intern.profile }}</div>
+            <div class="col-md-3 padding td" >{{ intern.location }}</div>
+            <div class="col-md-3 padding td" >{{ intern.stipend }}</div>
           </div>
         </div>
       </div>
@@ -311,31 +315,85 @@
       window.location.replace("{%url 'StudentProfile'%}");
     }
 
-    function sorting_string() {
-      console.log("working");
+    
+    function sorting_values(column_name) {
+      makeOthersDefault(column_name);
       const available_internships = '{{ available_internships_json|safe }}' ;
-      const available_internships_json = JSON.parse(available_internships);
-      console.log(available_internships_json);
-    }
-
-    function sorting_values() {
-      console.log("working2");
-
-      const available_internships = '{{ available_internships_json|safe }}' ;
-      const available_internships_json = JSON.parse(available_internships);
-      available_internships_json.sort(function(a, b){return a.fields.stipend - b.fields.stipend});
-      const table = document.getElementsByClassName("tableData");
+      const available_internships_json = JSON.parse(available_internships);      
+      let table = document.getElementsByClassName("tableData");
+      if ( document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-down(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
+        document.getElementById(column_name).className = "fas fa-sort-up"
+        available_internships_json.sort(function(a, b){return b.fields.stipend - a.fields.stipend});
+      }else if(document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-up(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
+        document.getElementById(column_name).className = "fas fa-sort-down";
+        available_internships_json.sort(function(a, b){return a.fields.stipend - b.fields.stipend});
+      }
       for (let i = 0; i < table.length ; i++) {
         var data = `<div class="col-md-3 padding td" class='column1'>${available_internships_json[i].fields.startup}</div>
                 <div class="col-md-3 padding td" class='column2'>${available_internships_json[i].fields.profile}</div>
                 <div class="col-md-3 padding td" class='column3'>${available_internships_json[i].fields.location}</div>
                 <div class="col-md-3 padding td" class='column4'>${available_internships_json[i].fields.stipend}</div>`
 
-        table[i].innerHTML = data
+        table[i].innerHTML = data;
       }
+    }
 
-      console.log(available_internships_json);
-      console.log("done");
+    function sorting_string(column_name) {
+      makeOthersDefault(column_name);
+      const available_internships = '{{ available_internships_json|safe }}' ;
+      const available_internships_json = JSON.parse(available_internships);      
+      let table = document.getElementsByClassName("tableData");
+
+      if (document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-down(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
+        document.getElementById(column_name).className = "fas fa-sort-up"
+        available_internships_json.sort(function(a, b){
+          var nameA = a.fields.column_name.toUpperCase(); 
+          var nameB = b.fields.column_name.toUpperCase(); 
+          if (nameA < nameB) {
+            return 1;
+          }
+          if (nameA > nameB) {
+            return -1;
+          }
+          
+      })
+      } 
+      else if (document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-up(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
+        document.getElementById(column_name).className = "fas fa-sort-down";
+        available_internships_json.sort(function(a, b){
+          var nameA = a.fields.column_name.toUpperCase(); 
+          var nameB = b.fields.column_name.toUpperCase(); 
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          
+      })
+    }
+    
+
+      for (let i = 0; i < table.length ; i++) {
+        var data = `<div class="col-md-3 padding td" class='column1'>${available_internships_json[i].fields.startup}</div>
+                <div class="col-md-3 padding td" class='column2'>${available_internships_json[i].fields.profile}</div>
+                <div class="col-md-3 padding td" class='column3'>${available_internships_json[i].fields.location}</div>
+                <div class="col-md-3 padding td" class='column4'>${available_internships_json[i].fields.stipend}</div>`
+
+        table[i].innerHTML = data;
+      }
+      
+    }
+
+    function makeOthersDefault(column_name){
+        const arr = ['profile','startup','location','stipend'];
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            if(element != column_name){
+              document.getElementById(element).className = "fas fa-sort";
+              console.log(element);
+            }
+        }
     }
   </script>
 
