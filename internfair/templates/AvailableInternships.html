@@ -105,7 +105,7 @@
             <div class="col padding"><input type="button" value='NAME' onclick="sorting_string('startup')"> <i class="fas fa-sort" id="startup"></i></div>
             <div class="col padding"><input type="button" value='PROFILE' onclick="sorting_string('profile')"> <i class="fas fa-sort" id="profile"></i></div>
             <div class="col padding"><input type="button" value='LOCATION' onclick="sorting_string('location')"> <i class="fas fa-sort" id="location"></i></div>
-            <div class="col padding"><input type="button" value='STIPEND' onclick="sorting_values('stipend')"> <i class="fas fa-sort" id="stipend"></i></div>
+            <div class="col padding"><input type="button" value='STIPEND' onclick="sorting_values2(3)"> <i class="fas fa-sort" id="stipend"></i></div>
           </div>
 
         </div>
@@ -113,22 +113,24 @@
 
 
       <!-- First row -->
+      <div class ="internshipRowMaster">
       {% for intern in interns %}
-      <div class="row p-2 p-md-0 top align-items-center internshipRow" id="{{intern.id}}"
-        onclick="openApplyModal({{intern.id}})">
-        <div class="col-3 col-md-auto  padding p-0 mx-3 m-md-0">
-          <img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img>
-        </div>
-        <div class="col-auto col-md p-0 px-md-3">
-          <div class="row flex-column flex-md-row  justify-content-center tableData " style="height: 100%;">
-            <!-- <div class="col-md-3 padding td" >{{ intern.startup }} </div> -->
-            <div class="col-md-3 padding td" >{{ intern.startup }} </div>
-            <div class="col-md-3 padding td" >{{ intern.profile }}</div>
-            <div class="col-md-3 padding td" >{{ intern.location }}</div>
-            <div class="col-md-3 padding td" >{{ intern.stipend }}</div>
+      <div class ="internshipRowMain">
+        <div class="row p-2 p-md-0 top align-items-center internshipRow" id="{{intern.id}}"
+          onclick="openApplyModal({{intern.id}})">
+          <div class="col-3 col-md-auto  padding p-0 mx-3 m-md-0">
+            <img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img>
+          </div>
+          <div class="col-auto col-md p-0 px-md-3">
+            <div class="row flex-column flex-md-row  justify-content-center tableData " style="height: 100%;">
+              <div class="col-md-3 padding td" id='column1' >{{ intern.startup.companyName }} </div>
+              <div class="col-md-3 padding td" id='column2' >{{ intern.profile }}</div>
+              <div class="col-md-3 padding td" id='column3' >{{ intern.location }}</div>
+              <div class="col-md-3 padding td" id='column4' >{{ intern.stipend }}</div>
+            </div>
           </div>
         </div>
-      </div>
+    
 
       
       {% comment %} Apply to company modal {% endcomment %}
@@ -203,6 +205,7 @@
               <input type="text" name="answers" required class="input">
               {% endif %}
               <br><br>
+            </div>
               {% endfor %}
 
 
@@ -220,12 +223,16 @@
       </div>
 
       {% endfor %}
+      </div>
       <!-- Second row (Later will be shown with for loop)-->
 
     </div>
 
   </div>
 
+  <!-- <script src="lodashClonedeep"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script> -->
+  <script src="{% static 'js/lodash.js' %}"></script>
 
   <script>
     function mySearch() {
@@ -278,6 +285,7 @@
 
     function openApplyModal(i) {
       var modal = document.getElementById("modal" + i);
+      console.log(i)
       modal.style.display = "block";
       window.onclick = function (event) {
         if (event.target == modal) {
@@ -336,6 +344,7 @@
 
         table[i].innerHTML = data;
       }
+      console.log(available_internships_json)
     }
 
     function sorting_string(column_name) {
@@ -344,11 +353,13 @@
       const available_internships_json = JSON.parse(available_internships);      
       let table = document.getElementsByClassName("tableData");
 
+      console.log(available_internships_json)
+
       if (document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-down(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
         document.getElementById(column_name).className = "fas fa-sort-up"
         available_internships_json.sort(function(a, b){
-          var nameA = a.fields.column_name.toUpperCase(); 
-          var nameB = b.fields.column_name.toUpperCase(); 
+          var nameA = a.fields[column_name].toUpperCase(); 
+          var nameB = b.fields[column_name].toUpperCase(); 
           if (nameA < nameB) {
             return 1;
           }
@@ -361,15 +372,14 @@
       else if (document.getElementById(column_name).className.match(/(?:^|\s)fa-sort-up(?!\S)/) || document.getElementById(column_name).className.match(/(?:^|\s)fa-sort(?!\S)/)){
         document.getElementById(column_name).className = "fas fa-sort-down";
         available_internships_json.sort(function(a, b){
-          var nameA = a.fields.column_name.toUpperCase(); 
-          var nameB = b.fields.column_name.toUpperCase(); 
+          var nameA = a.fields[column_name].toUpperCase(); 
+          var nameB = b.fields[column_name].toUpperCase(); 
           if (nameA < nameB) {
             return -1;
           }
           if (nameA > nameB) {
             return 1;
           }
-          
       })
     }
     
@@ -380,7 +390,7 @@
                 <div class="col-md-3 padding td" class='column3'>${available_internships_json[i].fields.location}</div>
                 <div class="col-md-3 padding td" class='column4'>${available_internships_json[i].fields.stipend}</div>`
 
-        table[i].innerHTML = data;
+        table[i].innerHTML = data
       }
       
     }
@@ -391,9 +401,40 @@
             const element = arr[index];
             if(element != column_name){
               document.getElementById(element).className = "fas fa-sort";
-              console.log(element);
+              // console.log(element)
             }
         }
+    }
+
+    function sorting_values2(column_num){
+      let row_data = document.getElementsByClassName('internshipRowMain')
+      let row_dataM = document.getElementsByClassName('internshipRowMaster')
+      let row_data2 = Array.from(row_data)
+      // const lodashClonedeep = require('lodash.clonedeep')
+      let row_data3 = _.cloneDeep(row_data2)
+      row_data3.sort(function(a, b){return a.children['0'].children["1"].children['0'].children[column_num].innerHTML - b.children['0'].children["1"].children['0'].children[column_num].innerHTML});
+      console.log(row_data3)
+      var data;
+      for (let i = 0; i < row_data3.length ; i++) {
+        // row_data[i].innerHTML = row_data3[i].innerHTML
+        // console.log(row_data3[i].children['0'].children["1"].children['0'].children[column_num].innerHTML)
+        // console.log(i)
+        data += row_data3[i].outerHTML
+      }
+      row_dataM.innerHTML = data
+      // console.log(row_data3[5].children['0'].children["1"].children['0'].children[column_num].innerHTML)
+      console.log('hello')    
+      // const row_data4 = _.cloneDeep(row_data3)
+      
+      // for (let i = 0; i < row_data3.length ; i++) {
+      //   console.log(row_data3[5].children['0'].children["1"].children['0'].children[column_num].innerHTML)
+        
+      //   row_data[i].innerHTML = row_data3[i].innerHTML
+      //   row_data3 = _.cloneDeep(row_data4)
+      //   console.log(row_data3[5].children['0'].children["1"].children['0'].children[column_num].innerHTML)
+      //   console.log(i)
+      // }
+      console.log('hello')    
     }
   </script>
 
