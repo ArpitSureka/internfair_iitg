@@ -54,7 +54,10 @@
                     <form method='POST' action='../recruiter/login'>
                         {% csrf_token %}
                         <input type="text" name='username' placeholder="Username" class="input">
-                        <input type="password" name='password' placeholder="Password" class="input">
+                        <input type="password" name='password' placeholder="Password" class="input" style="margin-bottom: 10px;">
+                        {% if error %}  
+                            <span style="color: red; margin-top: 20px;">{{error}}</span>
+                        {% endif %}
                         <input type="submit" value="Login" class="login">
                     </form>
 
@@ -68,16 +71,6 @@
                     </div>
                     <br><br>
                 </div>
-
-                {% if error %}
-                        <br>
-                        <div class="row" style="padding-left:15px">
-                        <div class="error col-9">
-                        {{error}}
-                        </div>
-                        </div>
-
-                {% endif %}
 
 
             </div>

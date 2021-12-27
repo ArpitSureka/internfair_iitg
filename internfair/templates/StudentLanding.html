@@ -54,7 +54,10 @@
                     <form method='POST' action="{% url 'StudentLogin' %}">
                         {% csrf_token %}
                         <input type="text" name='Username' placeholder="Username" class="input">
-                        <input type="password" name='Password' placeholder="Password" class="input">
+                        <input type="password" name='Password' placeholder="Password" class="input" style="margin-bottom: 10px;">
+                        {% if error %}  
+                            <span style="color: red; margin-top: 20px;">{{error}}</span>
+                        {% endif %}
                         <input type="submit" value="Login" class="login">
                     </form>
 
@@ -68,17 +71,7 @@
                     </div>
                     <br><br>
                 </div>
-
-                {% if error %}
-                        <br>
-                        <div class="row" style="padding-left:15px">
-                        <div class="error col-9">
-                        {{error}}
-                        </div>
-                        </div>
-
-                {% endif %}
-
+                
 
             </div>
             <div class="col-lg-7 order-lg-2 order-md-2 order-1 text-center col-md-6 col-12" id="intro"  >
