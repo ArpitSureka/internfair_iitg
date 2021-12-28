@@ -29,25 +29,25 @@
     
     <!---------------------------------------------------------------->
     
-    <table id="table" data-toggle="table"  data-search="true" data-pagination="true" data-filter-control="true" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar" class="table table-hover">
+    <table id="table" style="border: none !important; padding: 10px !important;" data-toggle="table"  data-search="true" data-pagination="true" data-filter-control="true" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar" class="table table-hover">
       <thead>
-        <tr>
-          <!-- <th data-field="state" data-checkbox="true"></th> -->
-          <th data-field="image"></th>
-          <th data-field="prenom" data-sortable="true">NAME</th>
-          <th data-field="date" data-sortable="true">PROFILE</th>
-          <th data-field="examen" data-sortable="true">DEPARTMENT</th>
+        <tr style="border-bottom: 1px solid #B6B6B6; padding: 10px !important;">
+          <!-- <th style="border: none !important; padding: 10px !important;" data-field="state" data-checkbox="true"></th> -->
+          <!-- <th style="border: none !important; padding: 10px !important;" data-field="image"></th> -->
+          <th style="border: none !important; padding: 10px !important;" data-field="prenom" data-sortable="true">NAME</th>
+          <th style="border: none !important; padding: 10px !important;" data-field="date" data-sortable="true">PROFILE</th>
+          <th style="border: none !important; padding: 10px !important;" data-field="examen" data-sortable="true">DEPARTMENT</th>
         </tr>
       </thead>
       <tbody>
         <!-- First row -->
         {% for intern in app %}
-        <tr class='internshipRow' id="{{intern.id}}" onclick="openApplyModal('{{intern.id}}')">
-          <td><svg data-jdenticon-value="user127{{intern.id }}" width="30" height="30">
-            Fallback text or image for browsers not supporting inline svg.</svg></td>
-            <td>{{ intern.Intern.name }}</td>
-            <td>{{ intern.Internship.profile }}</td>
-            <td>{{ intern.Intern.department }}</td>
+        <tr style="border-bottom: 1px solid #B6B6B6; padding: 10px !important;" class='internshipRow' id="{{intern.id}}" onclick="openApplyModal('{{intern.id}}')">
+          <!-- <td style="border: none !important; padding: 10px !important;"><svg data-jdenticon-value="user127{{intern.id }}" width="30" height="30">
+            Fallback text or image for browsers not supporting inline svg.</svg></td> -->
+            <td style="border: none !important; padding: 10px !important;">{{ intern.Intern.name }}</td>
+            <td style="border: none !important; padding: 10px !important;">{{ intern.Internship.profile }}</td>
+            <td style="border: none !important; padding: 10px !important;">{{ intern.Intern.department }}</td>
             
             <!------------------------------------------modal for internanswercard --------------------------------->
 
@@ -121,7 +121,7 @@
         </div>
       </tr>
       {% endfor %}
-      <!-- Second row (Later will be shown with for loop)-->
+      <!-- Second row (Later will be shown with style="border: none !important; padding: 10px !important;" for loop)-->
     </tbody>
   </table>
       

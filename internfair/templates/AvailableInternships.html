@@ -15,6 +15,7 @@
   <title>Available Internships</title>
 </head>
 
+
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-md navbar-light fixed-top" id="main-navbar">
@@ -59,26 +60,27 @@
         Tip: Apply smartly, as there are limited vacancies for each startup.
       </div>
     </div>
-    <table id="table" data-toggle="table"  data-search="true" data-pagination="true" data-filter-control="true" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar" class="table table-hover">
+    <div class="col-12" style="padding: 30px !important;">
+<table id="table" style="border: none !important; padding: 10px !important;" data-toggle="table"  data-search="true" data-pagination="true" data-filter-control="true" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar" class="table table-hover">
       <thead>
-        <tr>
-          <!-- <th data-field="state" data-checkbox="true"></th> -->
-          <th data-field="image"></th>
-          <th data-field="prenom" data-sortable="true">NAME</th>
-          <th data-field="date" data-sortable="true">PROFILE</th>
-          <th data-field="examen" data-sortable="true">LOCATION</th>
-          <th data-field="note" data-sortable="true">STIPEND</th>
+        <tr style="border-bottom: 1px solid #B6B6B6; padding: 10px !important;">
+          <!-- <th style="border: none !important; padding: 10px !important;" data-field="state" data-checkbox="true"></th> -->
+          <th style="border: none !important; padding: 10px !important;" data-field="image"></th>
+          <th style="border: none !important; padding: 10px !important;" data-field="prenom" data-sortable="true">NAME</th>
+          <th style="border: none !important; padding: 10px !important;" data-field="date" data-sortable="true">PROFILE</th>
+          <th style="border: none !important; padding: 10px !important;" data-field="examen" data-sortable="true">LOCATION</th>
+          <th style="border: none !important; padding: 10px !important;" data-field="note" data-sortable="true">STIPEND</th>
         </tr>
       </thead>
       <tbody>
         <!-- First row -->
         {% for intern in interns %}
-        <tr class='internshipRow' id="{{intern.id}}" onclick="openApplyModal('{{intern.id}}')">
-          <td><img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img></td>
-          <td>{{ intern.startup.companyName }}</td>
-          <td>{{ intern.profile }}</td>
-          <td>{{ intern.location }}</td>
-          <td>{{ intern.stipend }}</td>
+        <tr style="border-bottom: 1px solid #B6B6B6; padding: 10px !important;" class='internshipRow' id="{{intern.id}}" onclick="openApplyModal('{{intern.id}}')">
+          <td style="border: none !important; padding: 10px !important;"><img width="30" class='entry-logo' src="{{intern.startup.logo.url}}"></img></td>
+          <td style="border: none !important; padding: 10px !important;">{{ intern.startup.companyName }}</td>
+          <td style="border: none !important; padding: 10px !important;">{{ intern.profile }}</td>
+          <td style="border: none !important; padding: 10px !important;">{{ intern.location }}</td>
+          <td style="border: none !important; padding: 10px !important;">{{ intern.stipend }}</td>
 
           {% comment %} Apply to company modal {% endcomment %}
           <div class="applyToCompany" id="modal{{intern.id}}">
@@ -172,6 +174,8 @@
         <!-- Second row (Later will be shown with for loop)-->
       </tbody>
     </table>
+    </div>
+    
   </div>
 
   <!-- <script src="lodashClonedeep"></script> -->
