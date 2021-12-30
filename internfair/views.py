@@ -36,7 +36,7 @@ def student(request):
         return render(request, "StudentLanding.html")
 
 def contact(request):
-    return render(request, "contact.html")
+    return render(request, "home.html")
 
 class StudentRegistration(CreateView):
     model = User
@@ -241,21 +241,25 @@ def forgotPassword(request):
 def sendPassword(request):
     if request.method == 'POST':
         emailID = request.POST.get('emailID')
-        student = Students.objects.get(email=emailID)
+        student = Students.objects.filter(email=emailID).first()
         if student:
             if student.user.is_student:
                 N = 10
                 password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
                                                                 for i in range(N))
                 print("The generated random password : " + str(password))
-                subject = "vdds"
-                message = "The generated random password : " + str(password)
+                subject = "Password reset for Intern Fair"
+                message = "The generated random password : " + str(password) 
+                message = "Dear user,\r\r\nYour new temporary password is: " + str(password) + ".\nIt is highly advised to change your password after logging in using the above password.\r\r\nAll the best for Intern Fair 2022.\r\r\nRegards\nTeam Intern Fair\nUDGAM'22 "
                 student.user.set_password(str(password))
                 student.user.save()
                 email_from = settings.EMAIL_HOST_USER
                 send_mail(subject,message,email_from,[emailID],fail_silently=False)
-                
-    return redirect('StudentLogin')
+                return render(request, "ForgotPassword.html",{'message': 'Please check your inbox for your temporary password'})
+            else:
+                return render(request, "ForgotPassword.html",{'message':'This email is not registered for InternFair 2022. If you are a recruiter and lost your password please contact the InternFair team'})
+        else:
+            return render(request, "ForgotPassword.html",{'message': 'Please enter your correct IITG Webmail'})
 
 def sentPassword(request):
     return render(request, "sentPassword.html")

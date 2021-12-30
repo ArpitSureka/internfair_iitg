@@ -14,6 +14,15 @@
 		}
 	</style>
 	<title>INTERN FAIR</title>
+	<script>
+		window.onload = () => {
+			var websiteadd = window.location.href;
+			let result = websiteadd.includes("/contact/");
+			if(result){
+				document.getElementById('contact').click();
+			}
+		};
+	</script>
 </head>
 
 <body>
@@ -36,7 +45,6 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="headings"><a href="#Home" class="button">Home</a></li>
         <li class="headings"><a href="#testimonials" class="button">Testimonials</a></li>
-        <li class="headings"><a href="#" class="button">Statistics</a></li>
         <li class="headings"><a href="#CVBlogs" class="button">CV Blogs</a></li>
         <li class="headings"><a href="#ContactUs" class="button" id="contact">Contact Us</a></li>
       </ul>
